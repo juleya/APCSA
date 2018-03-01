@@ -1,11 +1,15 @@
 package unit9;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Deck {
 
 	/**
 	 * cards contains all the cards in the deck.
 	 */
 	//private List<Card> cards;
+	//private ArrayList<Card> cards = new ArrayList<Card>();
 	
 	//Unit 9 - Array version of the Deck
 	private Card[] cards;
@@ -27,7 +31,29 @@ public class Deck {
 	 * @param values is an array containing all of the card point values.
 	 */
 	public Deck(String[] ranks, String[] suits, int[] values) {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		
+		/*
+		for (String i : ranks) {
+			for (String j : suits) {
+				for (int h : values) {
+					cards.add(new Card (i, j, h));
+				}
+			}
+		}
+		*/
+		Card[] temp = new Card[ranks.length * suits.length];
+		int index = 0;
+		for (int i = 0; i< ranks.length; i++) {
+			for (int j = 0; j < suits.length; j++) {
+				temp[index] = new Card (ranks[i], suits[j], values[i]);
+				index++;
+			}
+		}
+		
+		//System.out.println(cards);
+		cards = temp;
+		size = ranks.length * suits.length;
+		//shuffle();
 	}
 
 
@@ -36,7 +62,9 @@ public class Deck {
 	 * @return true if this deck is empty, false otherwise.
 	 */
 	public boolean isEmpty() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		if (size == 0) {
+			return true;
+		} return false;
 	}
 
 	/**
@@ -44,7 +72,7 @@ public class Deck {
 	 * @return the number of undealt cards in this deck.
 	 */
 	public int size() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		return size;
 	}
 
 	/**
@@ -52,7 +80,14 @@ public class Deck {
 	 * and reset the size to represent the entire deck.
 	 */
 	public void shuffle() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 4 *** */
+		for (int k = cards.length - 1; k > 0; k--) {
+			Random rand = new Random();
+			int random = rand.nextInt(k);
+			Card temp = cards[k];
+			cards[k] = cards[random];
+			cards[random] = temp;
+	
+		}
 	}
 
 	/**
@@ -61,7 +96,8 @@ public class Deck {
 	 *         previously dealt.
 	 */
 	public Card deal() {
-		/* *** TO BE IMPLEMENTED IN ACTIVITY 2 *** */
+		size--;
+		return cards[size];
 	}
 
 	/**
@@ -74,9 +110,9 @@ public class Deck {
 
 
 		//Unit 9 - modify to work with Arrays
-		/*
+		
 		for (int k = size - 1; k >= 0; k--) {
-			rtn = rtn + cards.get(k);
+			rtn = rtn + cards[k];
 			if (k != 0) {
 				rtn = rtn + ", ";
 			}
@@ -87,17 +123,17 @@ public class Deck {
 		}
 
 		rtn = rtn + "\nDealt cards: \n";
-		for (int k = cards.size() - 1; k >= size; k--) {
-			rtn = rtn + cards.get(k);
+		for (int k = cards.length - 1; k >= size; k--) {
+			rtn = rtn + cards[k];
 			if (k != size) {
 				rtn = rtn + ", ";
 			}
-			if ((k - cards.size()) % 2 == 0) {
+			if ((k - cards.length) % 2 == 0) {
 				// Insert carriage returns so entire deck is visible on console.
 				rtn = rtn + "\n";
 			}
 		}
-		*/
+		
 
 		rtn = rtn + "\n";
 		return rtn;
