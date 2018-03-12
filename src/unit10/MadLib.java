@@ -17,6 +17,7 @@ public class MadLib
 	
 	public MadLib()
 	{
+	
 		verbs = new ArrayList<String>();
 		nouns = new ArrayList<String>();
 		adjectives = new ArrayList<String>();
@@ -29,29 +30,45 @@ public class MadLib
 
 	public MadLib(String fileName)
 	{
+		verbs = new ArrayList<String>();
+		nouns = new ArrayList<String>();
+		adjectives = new ArrayList<String>();
+		
 		loadVerbs();
 		loadNouns();
 		loadAdjectives();
 	
 		
 		try{
-			Scanner file = new Scanner(new File(fileName));
-			while (file.hasNext()) {
-				if (file.next().equals("#")) {
-					getRandomNoun();
+			Scanner file = new Scanner(new File(System.getProperty("user.dir") + fileName));
+			boolean set = true;
+			
+			while (set) {
+				
+				if (file.hasNext() == false) {
+					set = false;
+					break;
 				}
-				if (file.next().equals("@")) {
-					getRandomVerb();
+				String temp = file.next();
+				if (temp.equals("#")) {
+					System.out.print(getRandomNoun() + " ");
 				}
-				if (file.next().equals("&")) {
-					getRandomAdjective();
+				else if (temp.equals("@")) {
+					System.out.print(getRandomVerb() + " ");
+				}
+				else if (temp.equals("&")) {
+					System.out.print(getRandomAdjective() + " ");
+				}
+				else {
+					System.out.print(temp + " ");
 				}
 			}
 		
 		}
+		
 		catch(Exception e)
 		{
-			out.println("Houston we have a problem!");
+			e.printStackTrace();
 		}
 		
 	}
@@ -60,14 +77,14 @@ public class MadLib
 	{
 		try
 		{
-			Scanner keyboard = new Scanner(new File("nouns.dat"));
-			while (keyboard.hasNextLine()) {
-				nouns.add(keyboard.nextLine());
+			Scanner keyboard = new Scanner(new File("/Users/juliayang/eclipse-workspace/APCSA/nouns.dat"));
+			while (keyboard.hasNext()) {
+				nouns.add(keyboard.next());
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("nouns failed to load");
 		}	
 		
 	}
@@ -76,14 +93,14 @@ public class MadLib
 	{
 		try
 		{
-			Scanner keyboard = new Scanner(new File("verbs.dat"));
-			while (keyboard.hasNextLine()) {
-				verbs.add(keyboard.nextLine());
+			Scanner keyboard = new Scanner(new File("/Users/juliayang/eclipse-workspace/APCSA/verbs.dat"));
+			while (keyboard.hasNext()) {
+				verbs.add(keyboard.next());
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("verbs failed to load");
 		}	
 	}
 
@@ -91,14 +108,14 @@ public class MadLib
 	{
 		try
 		{
-			Scanner keyboard = new Scanner(new File("adjectives.dat"));
-			while (keyboard.hasNextLine()) {
-				adjectives.add(keyboard.nextLine());
+			Scanner keyboard = new Scanner(new File("/Users/juliayang/eclipse-workspace/APCSA/adjectives.dat"));			
+			while (keyboard.hasNext()) {
+				adjectives.add(keyboard.next());
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("adj failed to load");
 		}	
 	}
 
