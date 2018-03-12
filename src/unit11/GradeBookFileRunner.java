@@ -22,6 +22,7 @@ public class GradeBookFileRunner
 		int size = file.nextInt();
 		out.println(size);
 		Class test = new Class(name, size);
+		String empty = file.nextLine();
 		
 		for (int i = 0; i < size; i++) {
 			out.println("Enter the name of student " + (i + 1) + " : ");
@@ -34,7 +35,7 @@ public class GradeBookFileRunner
 			out.println(grades);
 			
 			Student s = new Student(student, grades);
-			out.println(s);
+			//out.println(s);
 			test.addStudent(i, s);
 		}
 		
