@@ -88,6 +88,10 @@ public class Student2 implements Comparable
 	} 
 	public int compareTo(Object obj) {
 		Student2 st = (Student2)obj;
-		return this.getAverage() - st.getAverage();
+		if (this.getAverage()-st.getAverage() < 0) {
+			return -1;
+		} else return 1;
 	}
+	
+
 }
