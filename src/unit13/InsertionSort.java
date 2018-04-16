@@ -10,8 +10,7 @@ class InsertionSort
 
 	public InsertionSort()
 	{
-
-
+		list = new ArrayList<String>();
 
 	}
 
@@ -19,20 +18,19 @@ class InsertionSort
 	public void add( String  word)
 	{
 		int loc = 0;
-
-
-
-
-
-
-
+		list.add(word);
 
 	}
 
 
 	public void remove(String word)
 	{
+		int index = list.indexOf(word);
+		if (index >= 0) {
+			System.out.println(index);
+			list.remove(index);
 
+		}
 
 
 
@@ -42,6 +40,10 @@ class InsertionSort
 
 	public String toString()
 	{
-		return "";
+		String output = "";
+		for (String s : list) {
+			output += s + " ";
+		}
+		return output;
 	}
 }

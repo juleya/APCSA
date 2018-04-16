@@ -20,21 +20,34 @@ public class NumberSort
 			number/= 10;
 		}
 
-		System.out.println(count);
 		
 		return count;
 	}
 	
 	public static int[] getSortedDigitArray(int number)
 	{
-		int[] sorted = new int[getNumDigits()];
+		int[] sorted = new int[getNumDigits(number)];
 		
+		for (int i = 0; i < sorted.length; i++) {
+			if (number > 0) {
+				int digit = number % 10;
+				sorted[i] = digit;
+				number -= digit;
+				number/= 10;
+			}
+			
+		}
 		
+		for (int i = 0; i < sorted.length; i++) {
+			for (int j = 0; j < sorted.length && j != i; j++) {
+				if (sorted[i] < sorted[j]) {
+					int temp = sorted[i];
+					sorted[i] = sorted[j];
+					sorted[j] = temp;
+				}
+			}
+		}
 		
-		
-		
-
-
 		return sorted;
 	}
 }
