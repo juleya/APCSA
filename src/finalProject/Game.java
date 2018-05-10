@@ -1,6 +1,7 @@
 package finalProject;
 
 import javax.swing.JFrame;
+
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;

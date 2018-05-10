@@ -3,12 +3,16 @@ package finalProject;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.Random;
+import java.awt.*;
+import javax.swing.*;
 
 
 public class Block {
 	private int value;
 	private int xPos;
 	private int yPos;
+	private String font = "Arial";
+	//private Font newFont;
 	
 	public Block(int num, int x, int y) {
 		value = num;
@@ -16,8 +20,11 @@ public class Block {
 		yPos = y;
 	}
 
+	public void setValue(int val) {
+		value = val;
+	}
 	
-	public int returnValue() {
+	public int getValue() {
 		return value;
 	}
 	
@@ -46,9 +53,13 @@ public class Block {
 		
 		window.setColor(Color.white);
 		window.fillRect(getX(), getY(), 100, 100);
+		
+		Font f = new Font(font, Font.BOLD, 24);
+		window.setFont(f);
+		
 		if (value != 0) {
 			window.setColor(Color.black);
-			window.drawString(String.valueOf(returnValue()), getX() + 50, getY() + 50);
+			window.drawString(String.valueOf(getValue()), getX() + 40, getY() + 55);
 		}
 
 	}
