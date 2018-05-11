@@ -1,6 +1,7 @@
 package finalProject;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -11,10 +12,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import static java.lang.Character.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Font.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.RepaintManager;
 
 
@@ -23,16 +27,20 @@ public class Board extends Canvas implements KeyListener, Runnable{
 	private Blocks blocks;
 	private boolean[] keys;
 	private BufferedImage back;
-	private boolean done = false;
 	private int score;
-	private String font = "Arial";
-	
+	private boolean drawnIntro = false;
+	private IntroScreen intro;
+	private boolean keyPressed = false;
+
 	public Board() {
-		setBackground(Color.black);
+
+		setBackground(Color.white);
 		
 		blocks = new Blocks();
 		
-		keys = new boolean[4];
+		keys = new boolean[5];
+		
+		intro = new IntroScreen();
 		
 		score = 0;
 		
@@ -44,10 +52,6 @@ public class Board extends Canvas implements KeyListener, Runnable{
 		
 	}
 	
-	public void newGame() {
-		
-	}
-
 
 	public void update(Graphics window) {
 		paint(window);
@@ -55,16 +59,29 @@ public class Board extends Canvas implements KeyListener, Runnable{
 	
 	public void paint(Graphics window) {
 		
+		
 		Graphics2D twoDGraph = (Graphics2D)window;
 		if(back==null)
 			   back = (BufferedImage)(createImage(getWidth(),getHeight()));
 		
 		Graphics graphToBack = back.createGraphics();
 		
-		graphToBack.setColor(Color.BLACK);
-		graphToBack.fillRect(0,0,800,600);
-		
-		blocks.draw(graphToBack);
+		if (drawnIntro == false) {
+			intro.draw(graphToBack); 
+
+			if (keyPressed) {
+				drawnIntro = true;
+				graphToBack.setColor(Color.white);
+				graphToBack.fillRect(0,0,710,525);
+				blocks.draw(graphToBack);
+
+			}
+		} else {
+			graphToBack.setColor(Color.white);
+			graphToBack.fillRect(0,0,710,525);
+			
+			blocks.draw(graphToBack);
+		}
 		
 		if(keys[0] == true)
 		{
@@ -91,78 +108,52 @@ public class Board extends Canvas implements KeyListener, Runnable{
 			
 			keys[3] = false;
 		}
-		
+		if (blocks.winsGame() == true) {
+			graphToBack.setColor(Color.red);
+			Font f = new Font("Comic Sans MS", Font.BOLD, 125);
+			graphToBack.setFont(f);
+			graphToBack.drawString("YOU WON", 10, 200);
+			
+			graphToBack.setColor(Color.black);
+			graphToBack.fillRect(20, 250, 425, 50);
+			graphToBack.setColor(Color.white);
+			f = new Font("Monospaced", Font.PLAIN, 20);
+			graphToBack.setFont(f);
+			graphToBack.drawString("PLAY AGAIN? PRESS 'Y' TO CONTINUE", 30, 280);
+			
+			if (keys[4] == true) {
+				graphToBack.setColor(Color.white);
+				graphToBack.fillRect(0,0,710,525);
+				blocks.startOver();
+			}
+		}
 		if (blocks.movePossible() == false) {
-			window.setColor(Color.red);
-			Font f = new Font(font, Font.BOLD, 30);
-			window.setFont(f);
-			window.drawString("YOU LOSE", 450, 800);
+			graphToBack.setColor(Color.red);
+			Font f = new Font("Comic Sans MS", Font.BOLD, 125);
+			graphToBack.setFont(f);
+			graphToBack.drawString("you lose :(", 10, 200);
+			
+			graphToBack.setColor(Color.black);
+			graphToBack.fillRect(20, 250, 425, 50);
+			graphToBack.setColor(Color.white);
+			f = new Font("Monospaced", Font.PLAIN, 20);
+			graphToBack.setFont(f);
+			graphToBack.drawString("PLAY AGAIN? PRESS 'Y' TO CONTINUE", 30, 280);
+			
+			if (keys[4] == true) {
+				graphToBack.setColor(Color.white);
+				graphToBack.fillRect(0,0,710,525);
+				blocks.startOver();
+			}
 		}
 		
 		twoDGraph.drawImage(back, null, 0, 0);
 
 	}
 
-	public static int assignRandom() {
-		Random ran = new Random();
-		if (ran.nextInt(2) == 1) {
-			return 2;
-		} else {
-			return 4;
-		}
-	}
-	
-	public static int genY(int x) {
-		Random r = new Random();
-		int y = 0;
-		
-		if (x == 0 || x == 3) {
-			return r.nextInt(4);
-		}
-		else if (x == 1 || x == 2) { 
-			y = r.nextInt(2);
-			if (y == 1) {
-				return 3;
-			} 
-		}
-		return y;
-	}
-	
-	public void genRandom() {
-		done = true;
-		if (done == true) {
-			done = false;
-			Random r = new Random();
-			int x, y = 0;
-			
-			x = r.nextInt(4);
-			System.out.println("x = " + x);
-
-			if (x == 0 || x == 3) {
-				y = r.nextInt(4);
-			}
-			else if (x == 1 || x == 2) { 
-				y = r.nextInt(2);
-				if (y == 1) {
-					y = 3;
-				} 
-			}
-			
-			System.out.println("y = " + y);
-
-			
-			if (blocks.blockAt(x, y).getValue() == 0) {
-				done = false;
-				System.out.println(x + " " + y);
-				blocks.blockAt(x, y).setValue(assignRandom());
-			} 
-		}
-	}
-
-		
-
 	public void keyPressed(KeyEvent e)
 	{
+		keyPressed = true;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT)
 		{
 			keys[0] = true;
@@ -179,11 +170,15 @@ public class Board extends Canvas implements KeyListener, Runnable{
 		{
 			keys[3] = true;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_Y)
+			keys[4] = true;
+		
 		repaint();
 	}
 	
 	public void keyReleased(KeyEvent e)
 	{
+		keyPressed = false;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT)
 		{
 			keys[0] = false;
@@ -200,6 +195,11 @@ public class Board extends Canvas implements KeyListener, Runnable{
 		{
 			keys[3] = false;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_Y)
+		{
+			keys[4] = false;
+		}
+
 		repaint();
 	}
 

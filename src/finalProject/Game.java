@@ -7,8 +7,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 public class Game extends JFrame{
-	private static final int WIDTH = 900;
-	private static final int HEIGHT = 900;
+	private static final int WIDTH = 710;
+	private static final int HEIGHT = 530;
 	
 	public Game() {
 		

@@ -1,8 +1,6 @@
 package finalProject;
 
 import java.util.Random;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.*;
 import javax.swing.*;
 
@@ -13,6 +11,22 @@ public class Blocks {
 	private static int score;
 	
 	public Blocks() {
+		
+		blocks = new Block[4][4];
+		
+		score = 0;
+		prevScore = 0;
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				blocks[i][j] = new Block(0, i * 120 + 20, j * 120 + 20);
+			}
+		}
+		
+		newGame();
+	}
+	
+	public void startOver() {
 		
 		blocks = new Block[4][4];
 		
@@ -59,11 +73,22 @@ public class Blocks {
 	
 	public static int assignRandom() {
 		Random ran = new Random();
-		if (ran.nextInt(2) == 1) {
-			return 2;
-		} else {
+		if (ran.nextInt(3) == 0) {
 			return 4;
+		} else {
+			return 2;
 		}
+	}
+	
+	public boolean winsGame() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (blocks[i][j].getValue() == 2048) 
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public boolean movePossible() {
@@ -122,15 +147,19 @@ public class Blocks {
 	}
 	
 	public static void writeOverScore(Graphics window) {
-		window.setColor(Color.black);
-		window.drawString("Score: " + prevScore, 700, 100);
+		Font f = new Font("Helvetica Neue", Font.BOLD, 24);
+		window.setFont(f);
+		window.setColor(Color.white);
+		window.drawString("Score: " + prevScore, 510, 75);
 		prevScore = score;
 	}
 
 	
 	public static void drawScore(Graphics window) {
-		window.setColor(Color.white);
-		window.drawString("Score: " + score, 700, 100);
+		Font f = new Font("Helvetica Neue", Font.BOLD, 24);
+		window.setFont(f);
+		window.setColor(Color.black);
+		window.drawString("Score: " + score, 510, 75);
 	}
 
 	public void genRandom() {
